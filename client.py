@@ -108,3 +108,31 @@ def pull(model_name, insecure=False, callback=None):
     except requests.exceptions.RequestException as e:
         print(f"An error occured: {e}")
 
+# Push a model to model registry.
+def push(model_name, insecure=False, callback=None):
+    try:
+        url = f"{BASE_URL}/api/push"
+        payload = {"name": model_name, "insecure": insecure}
+
+        # Make a POST request with stream=True
+        with requests.post(url, json=payload, stream=True) as response:
+            response.raise_for_status()
+
+            #Iterate over the response line by line
+            for line in response.iter_lines():
+                if line:
+                    chunk = json.loads(line)
+                if callback:
+                    callback(line)
+                else:
+                    print(chunk.get('status', ''), end='', flush=True)
+                
+                # If there is layer data, print it
+                if 'digest' in chunk:
+                    print(f" - Digest: {chunk['digest']}", end='', flush=True)
+                    print(f" - Total: {chunk['total']}", end='', flush=True)
+                    print(f" - Completed: {chunk['completed']}", end='\n', flush=True)
+                else:
+                    print()
+    except requests.exceptions.RequestException as e:
+        print(f"An error occured: {e}")
