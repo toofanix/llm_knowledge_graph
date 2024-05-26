@@ -136,3 +136,18 @@ def push(model_name, insecure=False, callback=None):
                     print()
     except requests.exceptions.RequestException as e:
         print(f"An error occured: {e}")
+
+# List models that are available locally
+def list():
+    try:
+        response = requests.get(f"{BASE_URL}/api/tags")
+        response.raise_for_status()
+        data = response.json()
+        models = data.get('model', [])
+        return models
+
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return None
+
+
