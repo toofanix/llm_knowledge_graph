@@ -149,5 +149,16 @@ def list():
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
         return None
+    
+# Copy a model. Creates a model with another name from an existing model.
+def copy(source, destination):
+    try:
+        # Create a JSON payload
+        payload = {"source": source, "destination": destination}
 
-
+        response = requests.post(f"{BASE_URL}/api/copy", json=payload)
+        response.raise_for_status()
+        return "Copy successful"
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return None
