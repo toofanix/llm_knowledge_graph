@@ -75,4 +75,36 @@ def create(model_name, model_path, callback=None):
                     print(f"Status: {chunk.get('status')}")
     except requests.exceptions.RequestException as e:
         print(f"An error occured: {e}")
-        
+
+
+# Pull a model from model reistry. Cancelled pulls a resumed 
+# and multiple call will share the same download progress. 
+def pull(model_name, insecure=False, callback=None):
+    try:
+        url = f"{BASE_URL}/api/pull"
+        payload = {"name": model_name, "insecure":insecure}
+
+        # POST request with stream=True
+        with requests.post(url, json=payload, stream=True) as response:
+            response.raise_for_status()
+
+            # Iterate over response line by line
+            for line in response.iter_lines():
+                if line:
+                    chunk = json.loads(line)
+
+                if callback:
+                    callback(line)
+                else:
+                    print(chunk.get('status', ''), end='', flush=True)
+
+                # If there is layer data, print that
+                if 'digest' in chunk:
+                    print(f" - Digest: {chunk['digest']}", end='', flush=True)
+                    print(f" - Total: {chunk['total']}", end='', flush=True)
+                    print(f" - Completed: {chunk['completed']}", end='\n', flush=True)
+                else:
+                    print()
+    except requests.exceptions.RequestException as e:
+        print(f"An error occured: {e}")
+
