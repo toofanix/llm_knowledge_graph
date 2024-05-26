@@ -174,3 +174,18 @@ def delete(model_name):
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
         return None
+    
+# Show info for a model
+def show(model_name):
+    try:
+        payload = {"name": model_name}
+        response = requests.post(f"{BASE_URL}/api/show", json=payload)
+        response.raise_for_status()
+
+        # Parse the response in to json
+        data = response.json()
+        return data
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return None
+    
