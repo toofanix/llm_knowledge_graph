@@ -54,3 +54,25 @@ def generate(model_name, prompt, system=None, template=None, context=None, optio
         print(f"An error occured: {e}")
         return None, None
 
+# Create a model from a Modelfile.
+def create(model_name, model_path, callback=None):
+    try:
+        url = f"{BASE_URL}/api/create"
+        payload = {"name": model_name, "path": model_path}
+
+        # Make a POST request with the stream=True 
+        with requests.post(url, json=payload, stream=True) as response:
+            response.raise_for_status()
+
+            # Iterating over the response line and line
+            for line in response.iter_lines():
+                if line:
+                    chunk = json.loads(line)
+
+                if callback:
+                    callback(chunk)
+                else:
+                    print(f"Status: {chunk.get('status')}")
+    except requests.exceptions.RequestException as e:
+        print(f"An error occured: {e}")
+        
