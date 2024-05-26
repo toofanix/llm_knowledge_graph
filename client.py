@@ -162,3 +162,15 @@ def copy(source, destination):
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
         return None
+    
+
+# delete a model and its data    
+def delete(model_name):
+    try:
+        payload = {"name": model_name}
+        response = requests.post(f"{BASE_URL}/api/delete", json=payload)
+        response.raise_for_status()
+        return "Delete successful"
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return None
