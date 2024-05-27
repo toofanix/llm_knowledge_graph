@@ -28,3 +28,15 @@ def df2ConceptList(dataframe: pd.DataFrame) -> List:
     # Flatten the list of lists to single list
     concept_list = np.concatenate(results).ravel().tolist()
     return concept_list
+
+def df2Graph(dataframe: pd.DataFrame, model=None)->list:
+    results = dataframe.apply(
+        lambda row: graphPrompt(row.text, {"chunk_id":row.chunk_id}, model), axis=1
+    )
+
+    results = results.dropna()
+    results = results.reset_index(drop=True)
+
+    # Flattent the list of lists to a single list
+    concept_list = np.concatenate(results).ravel().tolist()
+    return concept_list
