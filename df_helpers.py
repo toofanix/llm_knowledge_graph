@@ -2,8 +2,9 @@ import uuid
 import pandas as pd
 import numpy as np
 from prompts import extractConcepts, graphPrompt
+from typing import List
 
-def documents2Dataframe(documents) -> pd.Dataframe:
+def documents2Dataframe(documents) -> pd.DataFrame:
     rows = []
     for chunk in documents:
         row = {
@@ -11,7 +12,7 @@ def documents2Dataframe(documents) -> pd.Dataframe:
             **chunk.metadata,
             "chunk_id": uuid.uuid4().hex
         }
-        rows = rows + row
+        rows = rows + [row]
     df = pd.DataFrame(rows)
     return df
 
