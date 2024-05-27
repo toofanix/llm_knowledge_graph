@@ -1,6 +1,6 @@
 import sys
 from yachalk import chalk
-sys.path.apend("..")
+sys.path.append("..")
 import json
 import client as client
 
