@@ -4,7 +4,7 @@ sys.path.append("..")
 import json
 import client as client
 
-def extractConcepts(prompt: str, metadata={}, model="mistral-openorca:latest"):
+def extractConcepts(prompt: str, metadata={}, model="phi3:latest"):
     SYS_PROMPT = (
         "Your task is extract the key concepts (and non personal entities) mentioned in the given context. "
         "Extract only the most important and atomistic concepts, if  needed break the concepts down to the simpler concepts."
@@ -35,9 +35,9 @@ def extractConcepts(prompt: str, metadata={}, model="mistral-openorca:latest"):
     return result
 
 
-def graphPrompt(input: str, metadata={}, model='mistral-openorca:latest'):
+def graphPrompt(input: str, metadata={}, model='phi3:latest'):
     if model == None:
-        model = "mistral-openorca:latest"
+        model = "phi3:latest"
     model_info = client.show(model_name=model)
     print(chalk.blue(model_info))
 
