@@ -20,7 +20,7 @@ def generate(model_name, prompt, system=None, template=None, context=None, optio
         # Remove keys with None values
         payload = {k: v for k, v in payload.items() if v is None}
 
-        with requests.post(url, json=payload, stream=True) as response:
+        with requests.post(url, json=payload, stream=False) as response:
             response.raise_for_status()
 
             # variable to hold the context history of final chunk
